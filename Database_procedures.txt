@@ -1,0 +1,158 @@
+
+CREATE DATABASE PilotDB;
+GO
+
+
+USE PilotDB;
+GO
+
+
+CREATE TABLE Pilot (
+    PID INT PRIMARY KEY,        
+    Name NVARCHAR(100),         
+    Age INT,                    
+    Nationality NVARCHAR(50)    
+);
+GO
+
+
+
+
+
+INSERT INTO Pilot (PID, Name, Age, Nationality)
+VALUES 
+    (1, 'Klaus Mikaelson', 34, 'Swedish'),
+    (2, 'Jason Bourne', 29, 'Spanish'),
+    (3, 'James Bond', 41, 'Ghanaian'),
+    (4, 'Akira Tanaka', 38, 'Japanese'),
+    (5, 'Damien Salvatore', 27, 'French');
+GO
+
+
+
+
+-- Step 1: Alter the table to add the new column
+ALTER TABLE Pilot
+ADD Destination NVARCHAR(100);
+GO
+
+-- Step 2: Update existing records with dummy Destination values
+UPDATE Pilot
+SET Destination = 'New York'
+WHERE PID = 1;
+
+UPDATE Pilot
+SET Destination = 'Madrid'
+WHERE PID = 2;
+
+UPDATE Pilot
+SET Destination = 'Accra'
+WHERE PID = 3;
+
+UPDATE Pilot
+SET Destination = 'Tokyo'
+WHERE PID = 4;
+
+UPDATE Pilot
+SET Destination = 'Paris'
+WHERE PID = 5;
+GO
+
+-- Step 3: Verify the changes
+SELECT * FROM Pilot;
+GO
+
+
+
+
+
+
+CREATE PROCEDURE firstProcedure 
+AS
+BEGIN
+SELECT Name, Nationality,Destination
+FROM Pilot
+ORDER BY 
+Name;
+END
+GO
+
+
+EXEC myProcedure;
+
+
+
+
+
+-- Example 1: Single Parameter
+CREATE PROCEDURE firstParamProcedure(@choiceAge as Integer)
+AS
+BEGIN
+SELECT 
+Name,  Nationality, Age
+FROM Pilot
+WHERE
+Age <= @choiceAge 
+ORDER BY 
+Name;
+END
+GO
+
+EXEC firstParamProcedure  @choiceAge =4;
+
+
+
+
+
+-- Example 2: Multiple parameters
+CREATE PROCEDURE MoreParam(@choiceAge as Integer, @citizen as
+Varchar)
+AS
+BEGIN
+SELECT
+Name, Nationality, Age
+FROM Pilot
+WHERE
+Age <= @choiceAge AND Nationality=@citizen
+ORDER BY
+Name;
+END
+GO
+
+EXEC MoreParam @choiceAge=45, @citizen='Ghanaian';
+
+
+Note :--The update pilot has been replaced with Update_Pilot_final so you can copy that in place of the Update_pilot
+
+--Create PROCEDURE Update_Pilot_final
+--@PID int,
+--@Name varchar (30),
+--@Age int,
+--@Nationality varchar (30),
+--@Destination varchar (30)
+--AS
+--BEGIN
+--insert into Pilot(PID,Name,Age,Nationality,Destination) values
+--(@PID,@Name, @Age, @Nationality, @Destination)
+--select * from pilot 
+--print 'new pilot data'
+--END
+--GO
+
+EXEC Update_Pilot_final @PID=7,@Name="Felix" , @Age=1000,@Nationality='Ghanaian',@Destination='Inida'
+
+
+
+
+
+-- Example 4: Deleting Data
+CREATE PROCEDURE delete_Pilot
+@PID int
+AS
+BEGIN
+SET NOCOUNT ON;
+delete FROM Pilot
+where @PID=PID;
+END
+
+
